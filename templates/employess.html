@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+{% include "header.html" %}
+<html>
+<head><meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">-->
+<!--    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>-->
+    <link rel="stylesheet" href="static/style.css">
+    <title>Dhamu CRUD API</title>
+<style>
+
+        label {
+            display: block;
+<!--            margin-bottom: 10px;-->
+<!--            margin-left: 50px;-->
+        }
+
+        input {
+
+            margin-bottom: 40px;
+            margin-left: 60px;
+        }
+    </style>
+
+</head>
+<!--<body style="background-color:teal;">-->
+<br>
+{% block body %}
+
+<div class="container">
+    <div class="row">
+        <div class="col md-12">
+            <div id="hide"><h2 style="float:left;margin-left :38%;">Employee List</h2><br> <br><button type="button"  class="pull-right" onclick="openCreateForm()" id="add_newEmp">Add Employee</button></div >
+
+
+            <table class="table table-striped" id="employeesList">
+
+
+
+            </table>
+
+<div id="editFormContainer" style="display: none;width:80%; height:100%;" class="container-fluid table-warning">
+<h4 style="text-align:center;">Edit Employee Details</h4><br>
+<form id="editForm" class="row g-4">
+    <div>
+    <label for="employeeId" class="form-label" style="margin-left:60px;">Employee ID</label>
+    <input type="text" class="form-control" style="width:40%;margin-bottom:40px;" id="employeeId" name="employeeId" required value="Mark">
+  </div>
+<div style="padding-right:80px;">
+    <label for="employeeName" class="form-label" style="margin-left:60px;">Employee Name</label>
+    <input type="text" class="form-control" style="width:70%;margin-bottom:40px;" id="employeeName" name="employeeName" required value="Mark">
+  </div>
+      <div class="col-3">
+    <label for="employeePosition" class="form-label">Position</label>
+    <select class="form-select" id="employeePosition" name="employeePosition" required>
+        <option>Backend developer</option>
+        <option>Frontend developer</option>
+        <option>Full stack developer</option>
+        <option>Software developer</option>
+        <option>python developer</option>
+        <option>Java developer</option>
+    </select>
+  </div>
+      <div class="col-3" style="margin-left:45px;">
+
+    <label for="employeeDepartment" class="form-label">Department</label>
+    <select class="form-select" id="employeeDepartment" name="employeeDepartment"  required>
+      <option>IT</option>
+        <option>Tech</option>
+        <option>Testing</option>
+        <option>Development</option>
+    </select>
+  </div>
+  <div >
+    <label for="employeeSalary" class="form-label" style="margin-left:60px;">Salary</label>
+    <input type="text" class="form-control" style="width:70%;margin-bottom:40px;" id="employeeSalary" name="employeeSalary" required>
+  </div>
+     <div >
+    <label for="employeePass" class="form-label" style="margin-left:60px;">Salary</label>
+    <input type="text" class="form-control" style="width:70%;margin-bottom:40px;" id="employeePass" name="employeePass" required>
+  </div>
+
+    <div >
+        <label class="form-label" for="employeePhone" style="margin-left:60px;">Phone number </label>
+    <input type="tel" style="width:70%;margin-bottom:40px;" id="employeePhone" name="employeePhone" class="form-control" />
+
+</div>
+
+  <div>
+
+    <label for="employeeEmail" class="form-label"style="margin-left:60px;">Email</label>
+      <input type="text" class="form-control" id="employeeEmail" name="employeeEmail"  aria-describedby="inputGroupPrepend2" required>
+
+  </div>
+
+    <label style="margin-bottom:40px;margin-left:80px;">Gender:</label>
+        <br>
+        <input type="radio" id="male1" name="gender" value="Male" required>
+        <label for="male">Male</label>
+
+        <input type="radio" id="female1" name="gender" value="Female" required>
+        <label for="female">Female</label>
+
+  <div class="col-12" style="margin-left:40%;">
+    <button class="btn btn-primary" type="submit">Update</button>
+      <a href=""><button class="btn btn-warning" type="button" id="add_newEmp2">Back</button></a>
+  </div>
+
+</form>
+</div>
+
+<br>
+<div id="createFormContainer" class="container-fluid table-warning" style="display: none; width:80%; height:100%;">
+   <h4 style="text-align:center;">Create New Employee</h4><br>
+<form id="createForm" class="row g-3">
+  <div>
+    <label for="newEmployeeName" class="form-label" style="margin-left:60px;">Name</label>
+    <input type="text" class="form-control" style="width:70%;margin-bottom:40px;" id="newEmployeeName" name="newEmployeeName" required value="Mark">
+  </div>
+      <div class="col-3" style="margin-left:47px;">
+    <label for="newEmployeePosition" class="form-label" >Position</label>
+    <select class="form-select" id="newEmployeePosition" name="newEmployeePosition" required>
+        <option>Backend developer</option>
+        <option>Frontend developer</option>
+        <option>Full stack developer</option>
+        <option>Software developer</option>
+        <option>python developer</option>
+        <option>Java developer</option>
+    </select>
+  </div>
+      <div class="col-md-3" style="margin-left:30px;">
+    <label for="newEmployeeDepartment" class="form-label">Department</label>
+    <select class="form-select" id="newEmployeeDepartment" name="newEmployeeDepartment"  required>
+
+      <option>IT</option>
+        <option>Tech</option>
+        <option>Testing</option>
+        <option>Development</option>
+    </select>
+  </div>
+
+  <div>
+    <label for="newEmployeeSalary" class="form-label" style="margin-left:60px;">Salary</label>
+    <input type="text" class="form-control" style="width:70%;margin-bottom:40px;" id="newEmployeeSalary" name="newEmployeeSalary" required>
+  </div>
+<div>
+    <label for="newEmployeePass" class="form-label" style="margin-left:60px;">Password</label>
+    <input type="text" class="form-control" style="width:70%;margin-bottom:40px;" id="newEmployeePass" name="newEmployeePass" required>
+  </div>
+    <div >
+        <label class="form-label" for="newEmployeePhone" style="margin-left:60px;">Phone number </label>
+    <input type="tel" style="width:70%;margin-bottom:40px;" id="newEmployeePhone" name="newEmployeePhone" class="form-control" />
+
+</div>
+
+  <div>
+
+    <label for="newEmployeeEmail" class="form-label" style="margin-left:30px;">Email</label>
+      <input type="email" style="margin-left:30px;" class="form-control" id="newEmployeeEmail" name="newEmployeeEmail"  aria-describedby="inputGroupPrepend2" required>
+
+  </div>
+<label style="margin-bottom:40px;margin-left:80px;">Gender:</label>
+        <br>
+        <input type="radio" id="male" name="gender" value="Male" required>
+        <label style="margin-left:20px;" for="male1">Male</label>
+
+        <input type="radio" id="female" name="gender" value="Female" required>
+        <label style="margin-left:20px;" for="female1">Female</label>
+
+  <div class="col-12" style="margin-left:40%;">
+    <button class="btn btn-primary" type="submit">Register</button>
+      <a href=""><button class="btn btn-warning" type="button" id="add_newEmp1">Back</button></a>
+  </div>
+
+</form>
+</div>
+</div>
+
+    </div>
+</div>
+
+{% endblock %}
+
+
+
+<!--//GET API-->
+<script>
+    function getEmployeesList() {
+        fetch('http://127.0.0.1:5001/api/employees')
+            .then(response => {
+                console.log('response', response);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => displayEmployees(data))
+            .catch(error => console.error('Error fetching employees:', error));
+    }
+
+function displayEmployees(employees) {
+
+    const employeesList = document.getElementById('employeesList');
+
+    // Clear any existing content
+    employeesList.innerHTML = '';
+
+    if (!employees || employees.length === 0) {
+        console.log('No employee data found.');
+        return;
+    }
+
+    const headerRow = document.createElement('tr');
+    headerRow.innerHTML = '<th>S.No</th>';
+
+    for (const key in employees[0]) {
+        const th = document.createElement('th');
+        th.textContent = key;
+        headerRow.appendChild(th);
+    }
+
+    headerRow.innerHTML += '<th>Edit</th><th>Delete</th>';
+
+    employeesList.appendChild(headerRow);
+
+    employees.forEach((employee, index) => {
+        const row = document.createElement('tr');
+
+        const snoCell = document.createElement('td');
+        snoCell.textContent = index + 1;
+        row.appendChild(snoCell);
+
+        for (const key in employee) {
+            const td = document.createElement('td');
+            td.textContent = employee[key];
+            row.appendChild(td);
+        }
+
+        employeesList.appendChild(row);
+
+
+        const editCell = document.createElement('td');
+        const editButton = document.createElement('button');
+        editButton.textContent = 'Edit';
+<!--        editButton.style.backgroundColor = 'green';-->
+        editButton.classList.add('green-button');
+        editButton.addEventListener('click', () => handleEdit(employee.id));
+        editCell.appendChild(editButton);
+        row.appendChild(editCell);
+        const deleteCell = document.createElement('td');
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+<!--        deleteButton.style.backgroundColor = 'red';-->
+        deleteButton.classList.add('red-button');
+        deleteButton.addEventListener('click', () => handleDelete(employee.id));
+        deleteCell.appendChild(deleteButton);
+        row.appendChild(deleteCell);
+    });
+}
+
+// add new employee
+function openCreateForm() {
+document.getElementById('hide').style.display = 'none';
+    document.getElementById('employeesList').style.display = 'none';
+    document.getElementById('createFormContainer').style.display = 'block';
+    createForm = document.getElementById('createForm');
+    createForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const addData = {
+                name: createForm.querySelector('#newEmployeeName').value,
+                position: createForm.querySelector('#newEmployeePosition').value,
+                department: createForm.querySelector('#newEmployeeDepartment').value,
+                salary: createForm.querySelector('#newEmployeeSalary').value,
+                phone: createForm.querySelector('#newEmployeePhone').value,
+                email: createForm.querySelector('#newEmployeeEmail').value,
+                gender: createForm.querySelector('input[name="gender"]:checked').value,
+                Password: createForm.querySelector('#newEmployeePass').value,
+
+            };
+
+            const updateUrl = 'http://127.0.0.1:5001/api/add_employee/';
+
+            fetch(updateUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(addData),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(addEmployee => {
+                console.log('added response data:', addEmployee);
+                alert("Employee Added successfully");
+                getEmployeesList();
+                location.reload();
+            })
+            .catch(error => {
+                console.error('Error during update fetch:', error);
+            });
+        });
+    }
+<!--Edit API-->
+function handleEdit(employeeId) {
+
+    const editUrl = `http://127.0.0.1:5001/api/employee/?emp_id=${employeeId}`;
+
+    document.getElementById('employeesList').style.display = 'none';
+    document.getElementById('hide').style.display = 'none';
+    document.getElementById('editFormContainer').style.display = 'block';
+
+    fetch(editUrl, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Edit response data:', data);
+
+            displayEditForm(data);
+    })
+    .catch(error => {
+        console.error('Error during edit fetch:', error);
+    });
+}
+
+
+    function displayEditForm(employee) {
+        const editForm = document.getElementById('editForm');
+         var employee = employee[0]
+        editForm.querySelector('#employeeId').value = employee.id;
+        editForm.querySelector('#employeeName').value = employee.name;
+        editForm.querySelector('#employeePosition').value = employee.position;
+        editForm.querySelector('#employeeDepartment').value = employee.department;
+        editForm.querySelector('#employeeSalary').value = employee.salary;
+        editForm.querySelector('#employeePhone').value = employee.phone;
+        editForm.querySelector('#employeeEmail').value = employee.email;
+        editForm.querySelector('#employeePass').value = employee.password;
+<!--        editForm.querySelector('input[name="gender"]').value = employee.gender;-->
+
+        const genderRadio = editForm.querySelector(`input[name="gender"][value="${employee.gender}"]`);
+            if (genderRadio) {
+                genderRadio.checked = true;
+            }
+
+        const editFormContainer = document.getElementById('editFormContainer');
+        editFormContainer.style.display = 'block';
+
+        editForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            const updatedData = {
+                id: editForm.querySelector('#employeeId').value,
+                name: editForm.querySelector('#employeeName').value,
+                position: editForm.querySelector('#employeePosition').value,
+                department: editForm.querySelector('#employeeDepartment').value,
+                salary: editForm.querySelector('#employeeSalary').value,
+                phone: editForm.querySelector('#employeePhone').value,
+                email: editForm.querySelector('#employeeEmail').value,
+                password: editForm.querySelector('#employeePass').value,
+                gender: editForm.querySelector('input[name="gender"]:checked').value,
+            };
+
+            const updateUrl = 'http://127.0.0.1:5001/api/updateEmployee/';
+
+            fetch(updateUrl, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedData),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(updatedEmployee => {
+                console.log('Update response data:', updatedEmployee);
+                alert("Employee updated successfully");
+                getEmployeesList();
+                location.reload();
+
+            })
+            .catch(error => {
+                console.error('Error during update fetch:', error);
+            });
+        });
+    }
+
+
+
+// Function to handle delete button click
+function handleDelete(employeeId) {
+    alert(employeeId)
+
+    const deleteUrl = `http://127.0.0.1:5001/api/deleteEmployee/?emp_id=${employeeId}`;
+<!--    const deleteUrl = `http://127.0.0.1:5001/api/employee/?emp_id=${employeeId}`;-->
+
+    fetch(deleteUrl, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => {
+        console.log('rrrr', response)
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(deletedEmployee => {
+        console.log('Delete response data:', deletedEmployee);
+        getEmployeesList();
+    })
+    .catch(error => {
+        console.error('Error during delete fetch:', error);
+    });
+}
+
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+        getEmployeesList();
+    });
+</script>
+
+
+<!--<script type="text/javascript" src="{{url_for('static', filename='js/jquery-3.2.1.min.js') }}"></script>-->
+
+<!--<script type="text/javascript" src="{{url_for('static', filename = 'js/bootstrap.min.js')}}"></script>-->
+</body>
+</html>
